@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dynamic Pricing Cards</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#4f46e5",
+            secondary: "#e0e7ff",
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+  <div class="max-w-7xl mx-auto px-4 py-16">
+    <h2 class="text-4xl font-bold text-center mb-6">Choose Your Plan</h2>
+
+    <!-- Pricing Toggle -->
+    <div class="flex justify-center mb-12">
+      <label class="flex items-center space-x-4">
+        <span class="text-lg font-medium">Monthly</span>
+        <input id="pricingToggle" type="checkbox" class="hidden" />
+        <div
+          onclick="togglePricing()"
+          class="w-12 h-6 flex items-center bg-gray-300 rounded-full p-1 cursor-pointer"
+        >
+          <div
+            id="toggleCircle"
+            class="bg-white w-4 h-4 rounded-full shadow-md transform duration-300"
+          ></div>
+        </div>
+        <span class="text-lg font-medium">Yearly</span>
+      </label>
+    </div>
+
+    <div id="cardsContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+    </div>
+  </div>
+
+  <script>
+    const plans = [
+      {
+        name: "Starter",
+        description: "Basic features for personal use.",
+        monthly: "₹499",
+        yearly: "₹4999",
+        features: ["✅ 1 Website", "✅ 10 GB Storage", "✅ Email Support"],
+        button: "Get Started",
+        bgColor: "bg-white",
+      },
+      {
+        name: "Professional",
+        description: "Advanced tools for growing teams.",
+        monthly: "₹999",
+        yearly: "₹9999",
+        features: ["✅ 5 Websites", "✅ 100 GB Storage", "✅ Priority Support"],
+        button: "Choose Plan",
+        bgColor: "bg-secondary border-4 border-primary shadow-lg",
+      },
+      {
+        name: "Enterprise",
+        description: "Full power for large businesses.",
+        monthly: "₹1999",
+        yearly: "₹19999",
+        features: ["✅ Unlimited Websites", "✅ 1 TB Storage", "✅ 24/7 Dedicated Support"],
+        button: "Contact Sales",
+        bgColor: "bg-white",
+      },
+    ];
+
+    const container = document.getElementById("cardsContainer");
+
+    plans.forEach((plan) => {
+      const card = document.createElement("div");
+      card.className = `${plan.bgColor} rounded-xl shadow-md p-8 hover:scale-105 transition`;
+
+      card.innerHTML = `
+        <h3 class="text-xl font-bold mb-2">${plan.name}</h3>
+        <p class="text-gray-600 mb-4">${plan.description}</p>
+        <p class="text-3xl font-bold mb-6">
+          <span class="price" data-month="${plan.monthly}" data-year="${plan.yearly}">${plan.monthly}</span>
+          <span class="text-sm text-gray-500">/mo</span>
+        </p>
+        <ul class="mb-6 space-y-2">
+          ${plan.features.map(f => `<li>${f}</li>`).join("")}
+        </ul>
+        <button class="w-full bg-primary text-white py-2 rounded hover:bg-indigo-700">
+          ${plan.button}
+        </button>
+      `;
+
+      container.appendChild(card);
+    });
+
+    function togglePricing() {
+      const prices = document.querySelectorAll(".price");
+      const toggle = document.getElementById("toggleCircle");
+
+      prices.forEach((priceEl) => {
+        const isYearly = toggle.classList.toggle("translate-x-6");
+        const value = isYearly ? priceEl.dataset.year : priceEl.dataset.month;
+        priceEl.textContent = value;
+      });
+    }
+  </script>
+
+</body>                                               
+</html>
